@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-01-11
 
+> 🏷️ [Release](https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0) · [Compare](https://github.com/ArnoFrost/ADotFiles/commits/v1.0.0)
+
 ### Features
 
 - **CLI Commands**: `adot install`, `adot deps`, `adot doctor`, `adot status`, `adot unlink`, `adot uninstall`, `adot restore`, `adot pull`, `adot sync`

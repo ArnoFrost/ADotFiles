@@ -5,8 +5,10 @@
 [English](./README_EN.md) | 简体中文
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/github/v/release/ArnoFrost/ADotFiles?color=green)](https://github.com/ArnoFrost/ADotFiles/releases)
 [![Shell](https://img.shields.io/badge/shell-zsh-yellow.svg)]()
+
+> **Latest: [v1.0.0](https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0)** · [查看更新日志](docs/CHANGELOG.md)
 
 ## 📖 设计理念
 
@@ -187,6 +189,8 @@ alias proj="cd ~/MyProjects"
 ## 📝 关于
 
 一套个人 dotfiles 设计方案，核心的**模块化设计**和**本地隔离机制**具有一定参考价值。欢迎 Fork 后根据自己的需求调整。
+
+> 📋 **[查看完整更新日志](docs/CHANGELOG.md)** | 🏷️ **[所有版本](https://github.com/ArnoFrost/ADotFiles/releases)**
 
 ## 📄 License
 
