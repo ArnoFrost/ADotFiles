@@ -5,8 +5,10 @@
 English | [简体中文](./README.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](docs/CHANGELOG.md)
+[![Release](https://img.shields.io/github/v/release/ArnoFrost/ADotFiles?color=green)](https://github.com/ArnoFrost/ADotFiles/releases)
 [![Shell](https://img.shields.io/badge/shell-zsh-yellow.svg)]()
+
+> **Latest: [v1.0.0](https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0)** · [View Changelog](docs/CHANGELOG.md)
 
 ## 📖 Design Philosophy
 
@@ -187,6 +189,8 @@ Auto-installed tools: `eza` `bat` `autojump` `zsh-autosuggestions` `zsh-syntax-h
 ## 📝 About
 
 A personal dotfiles design. The core **modular design** and **local isolation mechanism** may serve as useful reference. Feel free to fork and adapt to your needs.
+
+> 📋 **[Full Changelog](docs/CHANGELOG.md)** | 🏷️ **[All Releases](https://github.com/ArnoFrost/ADotFiles/releases)**
 
 ## 📄 License
 
