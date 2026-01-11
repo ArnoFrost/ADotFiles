@@ -1,0 +1,14 @@
+# AI 任务目录 (个人)
+ai-task
+
+# 本地配置文件 (不同步)
+zsh/work.zsh
+zsh/path.local.zsh
+zsh/aliases.local.zsh
+
+# macOS
+.DS_Store
+
+# 备份文件
+*.bak
+*~

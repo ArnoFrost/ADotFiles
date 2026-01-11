@@ -1,0 +1,29 @@
+# =====================================
+# 个人 PATH 扩展 (示例)
+# =====================================
+# 复制为 path.local.zsh 或 ~/.zsh/path.local.zsh 使用
+# 此文件不会被 git 追踪
+
+# ----- 工具函数 (从 path.zsh 继承) -----
+# _path_prepend() 和 _path_append() 可能已被清理
+# 使用以下方式添加路径:
+_add_path() { [[ -d "$1" && ":$PATH:" != *":$1:"* ]] && export PATH="$1:$PATH"; }
+
+# ----- AI/开发工具 -----
+# CodeBuddy CLI
+_add_path "$HOME/.codebuddy/bin"
+
+# LM Studio CLI
+_add_path "$HOME/.lmstudio/bin"
+
+# ----- 框架/库 -----
+# Qt5 (Homebrew)
+_add_path "/opt/homebrew/opt/qt@5/bin"
+
+# Flutter
+# _add_path "$HOME/flutter/bin"
+
+# ----- 自定义 -----
+# 添加你的个人路径...
+
+unfunction _add_path 2>/dev/null
