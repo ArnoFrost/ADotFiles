@@ -4,11 +4,33 @@
 
 English | [简体中文](./README.md)
 
+<!-- Badges: Core -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/ArnoFrost/ADotFiles?color=green)](https://github.com/ArnoFrost/ADotFiles/releases)
-[![Shell](https://img.shields.io/badge/shell-zsh-yellow.svg)]()
+[![Shell](https://img.shields.io/badge/Shell-Zsh-4EAA25?logo=gnu-bash&logoColor=white)]()
+[![Platform](https://img.shields.io/badge/Platform-macOS-000000?logo=apple&logoColor=white)]()
+
+<!-- Badges: Tech Stack -->
+[![Powerlevel10k](https://img.shields.io/badge/Theme-Powerlevel10k-blueviolet?logo=powershell&logoColor=white)](https://github.com/romkatv/powerlevel10k)
+[![Homebrew](https://img.shields.io/badge/Deps-Homebrew-FBB040?logo=homebrew&logoColor=white)](https://brew.sh)
+[![iCloud](https://img.shields.io/badge/Sync-iCloud-3693F3?logo=icloud&logoColor=white)]()
 
 > **Latest: [v1.0.0](https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0)** · [View Changelog](docs/CHANGELOG.md)
+
+---
+
+## ⚡ Features
+
+| Feature | Description |
+|:--------|:------------|
+| 📦 **Modular** | Split by function, load on demand, easy to maintain |
+| ☁️ **Syncable** | iCloud / Git / Dropbox / Syncthing supported |
+| 🏠 **Isolated** | Device-specific stays local, no interference |
+| 🔌 **Extensible** | `.local.zsh` + `.example` template mechanism |
+| ⚡ **Lazy Load** | NVM / SDKMAN / Conda on-demand loading |
+| 🛠️ **CLI Ready** | `adot` command for one-click management |
+
+---
 
 ## 📖 Design Philosophy
 
@@ -191,6 +213,12 @@ Auto-installed tools: `eza` `bat` `autojump` `zsh-autosuggestions` `zsh-syntax-h
 A personal dotfiles design. The core **modular design** and **local isolation mechanism** may serve as useful reference. Feel free to fork and adapt to your needs.
 
 > 📋 **[Full Changelog](docs/CHANGELOG.md)** | 🏷️ **[All Releases](https://github.com/ArnoFrost/ADotFiles/releases)**
+
+---
+
+<p align="center">
+  <sub>Made with ❤️ by <a href="https://github.com/ArnoFrost">Arno</a></sub>
+</p>
 
 ## 📄 License
 
