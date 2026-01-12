@@ -1,34 +1,63 @@
+<div align="center">
+
 # ADotFiles
 
-> A modular Zsh configuration framework with multi-device sync and local isolation
+**A modular Zsh configuration framework with multi-device sync and local isolation**
 
 English | [简体中文](./README.md)
 
-<!-- Badges: Core -->
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/ArnoFrost/ADotFiles?color=green)](https://github.com/ArnoFrost/ADotFiles/releases)
-[![Shell](https://img.shields.io/badge/Shell-Zsh-4EAA25?logo=gnu-bash&logoColor=white)]()
-[![Platform](https://img.shields.io/badge/Platform-macOS-000000?logo=apple&logoColor=white)]()
+[![GitHub stars](https://img.shields.io/github/stars/ArnoFrost/ADotFiles?style=flat-square&logo=github)](https://github.com/ArnoFrost/ADotFiles/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/ADotFiles?style=flat-square&logo=github)](https://github.com/ArnoFrost/ADotFiles/network)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ArnoFrost/ADotFiles?style=flat-square)](https://github.com/ArnoFrost/ADotFiles/commits)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/ArnoFrost/ADotFiles?style=flat-square&color=green)](https://github.com/ArnoFrost/ADotFiles/releases)
 
-<!-- Badges: Tech Stack -->
-[![Powerlevel10k](https://img.shields.io/badge/Theme-Powerlevel10k-blueviolet?logo=powershell&logoColor=white)](https://github.com/romkatv/powerlevel10k)
-[![Homebrew](https://img.shields.io/badge/Deps-Homebrew-FBB040?logo=homebrew&logoColor=white)](https://brew.sh)
-[![iCloud](https://img.shields.io/badge/Sync-iCloud-3693F3?logo=icloud&logoColor=white)]()
+[![Shell](https://img.shields.io/badge/Shell-Zsh-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)]()
+[![Platform](https://img.shields.io/badge/Platform-macOS-000000?style=flat-square&logo=apple&logoColor=white)]()
+[![Powerlevel10k](https://img.shields.io/badge/Theme-Powerlevel10k-blueviolet?style=flat-square&logo=powershell&logoColor=white)](https://github.com/romkatv/powerlevel10k)
+[![Homebrew](https://img.shields.io/badge/Deps-Homebrew-FBB040?style=flat-square&logo=homebrew&logoColor=white)](https://brew.sh)
 
-> **Latest: [v1.0.0](https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0)** · [View Changelog](docs/CHANGELOG.md)
+<p>
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-cli-commands">Commands</a> •
+  <a href="#-sync-options">Sync</a> •
+  <a href="./docs/CHANGELOG.md">Changelog</a>
+</p>
+
+</div>
+
+---
+
+<details>
+<summary>📖 Table of Contents</summary>
+
+- [Features](#-features)
+- [Design Philosophy](#-design-philosophy)
+- [Architecture](#-architecture)
+- [Use Cases](#-use-cases)
+- [Quick Start](#-quick-start)
+- [Sync Options](#-sync-options)
+- [Module Overview](#-module-overview)
+- [CLI Commands](#-cli-commands)
+- [Extension Guide](#-extension-guide)
+- [Requirements](#-requirements)
+- [Known Limitations](#-known-limitations)
+
+</details>
 
 ---
 
 ## ⚡ Features
 
 | Feature | Description |
-|:--------|:------------|
-| 📦 **Modular** | Split by function, load on demand, easy to maintain |
-| ☁️ **Syncable** | iCloud / Git / Dropbox / Syncthing supported |
-| 🏠 **Isolated** | Device-specific stays local, no interference |
-| 🔌 **Extensible** | `.local.zsh` + `.example` template mechanism |
-| ⚡ **Lazy Load** | NVM / SDKMAN / Conda on-demand loading |
-| 🛠️ **CLI Ready** | `adot` command for one-click management |
+|:---:|---|
+| 📦 | **Modular** - Split by function, load on demand, easy to maintain |
+| ☁️ | **Syncable** - iCloud / Git / Dropbox / Syncthing supported |
+| 🏠 | **Isolated** - Device-specific stays local, no interference |
+| 🔌 | **Extensible** - `.local.zsh` + `.example` template mechanism |
+| ⚡ | **Lazy Load** - NVM / SDKMAN / Conda on-demand loading |
+| 🛠️ | **CLI Ready** - `adot` command for one-click management |
 
 ---
 
@@ -51,6 +80,8 @@ mindmap
       .example templates
       .local.zsh mechanism
 ```
+
+---
 
 ## 🏗 Architecture
 
@@ -84,17 +115,23 @@ flowchart TB
     ZSHRC -->|source| LOCAL
 ```
 
+### Module Loading Order
+
+```mermaid
+flowchart LR
+    A["zshrc"] --> B["core"] --> C["path"] --> D["plugins"]
+    D --> E["aliases"] --> F["functions"] --> G["sdk"]
+    G --> H["work<br/>(optional)"] --> I["local<br/>(optional)"]
+```
+
+---
+
 ## 🎯 Use Cases
 
-**✅ Suitable for:**
-- Multiple devices, want consistent config
-- Need device-specific customizations
-- Prefer modular, maintainable structure
+- **Suitable for**: Multi-device config sync, device-specific customizations, modular maintainable structure
+- **Not suitable for**: Non-Zsh users, single-file config preference, full Linux/macOS parity needed
 
-**❌ Not suitable for:**
-- Non-Zsh users
-- Prefer single-file config
-- Need full Linux/macOS parity (this project leans macOS)
+---
 
 ## 🚀 Quick Start
 
@@ -109,6 +146,8 @@ cd ~/ADotFiles && bash setup.sh install
 source ~/.zshrc
 ```
 
+---
+
 ## ☁️ Sync Options
 
 This framework doesn't lock you into any specific sync method:
@@ -120,9 +159,11 @@ This framework doesn't lock you into any specific sync method:
 | **Dropbox** | Cross-platform auto-sync | Clone to Dropbox folder |
 | **Syncthing** | Self-hosted sync | Configure sync directory |
 
+---
+
 ## 📁 Module Overview
 
-```
+```text
 ADotFiles/
 ├── setup.sh                     # CLI tool (adot)
 ├── zshrc                        # Entry point, loads modules
@@ -134,53 +175,28 @@ ADotFiles/
     ├── aliases.zsh              # Common aliases
     ├── functions.zsh            # Common functions
     ├── sdk.zsh                  # SDK lazy loading (NVM/SDKMAN/Conda)
-    │
-    ├── path.local.zsh.example   # Personal paths template
-    ├── aliases.local.zsh.example # Personal aliases template
-    ├── work.zsh.example         # Work config template
     └── local.zsh.template       # Local config template
 ```
 
-### Module Loading Order
-
-```mermaid
-flowchart LR
-    A["zshrc"] --> B["core"] --> C["path"] --> D["plugins"]
-    D --> E["aliases"] --> F["functions"] --> G["sdk"]
-    G --> H["work<br/>(optional)"] --> I["local<br/>(optional)"]
-```
+---
 
 ## 🛠 CLI Commands
 
-```bash
-adot install     # Full install (link + deps)
-adot deps        # Install dependencies only
-adot doctor      # Run diagnostics
-adot status      # Show link status
+| Command | Description |
+|---------|-------------|
+| `adot install` | Full install (link + deps) |
+| `adot deps` | Install dependencies only |
+| `adot doctor` | Run diagnostics |
+| `adot status` | Show link status |
+| `adot unlink` | Unlink configs |
+| `adot uninstall` | Full uninstall |
+| `adot restore` | Restore from backup |
+| `adot pull` | Pull updates |
+| `adot sync` | Push to remote |
 
-adot unlink      # Unlink configs
-adot uninstall   # Full uninstall
-adot restore     # Restore from backup
-
-adot pull        # Pull updates
-adot sync        # Push to remote
-```
+---
 
 ## ⚙️ Extension Guide
-
-### Add Personal Config
-
-```bash
-# 1. Create from template
-cp zsh/path.local.zsh.example zsh/path.local.zsh
-cp zsh/aliases.local.zsh.example zsh/aliases.local.zsh
-
-# 2. Edit personal config
-vim zsh/path.local.zsh
-
-# 3. Reload
-source ~/.zshrc
-```
 
 ### Local Config (~/.zsh/local.zsh)
 
@@ -195,6 +211,8 @@ ADOT_LOAD_SDK=false
 alias proj="cd ~/MyProjects"
 ```
 
+---
+
 ## 📋 Requirements
 
 - [Homebrew](https://brew.sh) (macOS)
@@ -202,11 +220,15 @@ alias proj="cd ~/MyProjects"
 
 Auto-installed tools: `eza` `bat` `autojump` `zsh-autosuggestions` `zsh-syntax-highlighting`
 
+---
+
 ## ⚠️ Known Limitations
 
 - **macOS-leaning** - Dependency detection based on Homebrew
 - **Zsh only** - No Bash/Fish support
 - **Sync conflicts** - Simultaneous edits may conflict; one-way sync recommended
+
+---
 
 ## 📝 About
 
@@ -214,12 +236,16 @@ A personal dotfiles design. The core **modular design** and **local isolation me
 
 > 📋 **[Full Changelog](docs/CHANGELOG.md)** | 🏷️ **[All Releases](https://github.com/ArnoFrost/ADotFiles/releases)**
 
----
-
-<p align="center">
-  <sub>Made with ❤️ by <a href="https://github.com/ArnoFrost">Arno</a></sub>
-</p>
-
 ## 📄 License
 
 [MIT](LICENSE)
+
+---
+
+<div align="center">
+
+Made with ❤️ by [ArnoFrost](https://github.com/ArnoFrost)
+
+[![GitHub](https://img.shields.io/badge/GitHub-ArnoFrost-181717?style=flat-square&logo=github)](https://github.com/ArnoFrost)
+
+</div>
