@@ -3,108 +3,22 @@
 # =====================================
 # 此文件在所有其他模块之前加载
 # 可在此设置变量供后续模块使用
-#
-# 位置: ~/.zsh/local.zsh
-# 注意: 此文件不会同步到 iCloud，仅存在于本机
-# 
-# 提示: 运行 adotstatus 查看当前配置状态
 
-# =====================================
-# 设备标识
-# =====================================
+# ----- 设备标识 -----
 export DEVICE_NAME="MacBook"
-# 示例:
-# export DEVICE_NAME="MacBook-Work"     # 工作机
-# export DEVICE_NAME="MacBook-Home"     # 家用机
-# export DEVICE_NAME="MacBook-Dev"      # 开发机
 
-# =====================================
-# 模块开关
-# =====================================
-# 设为 false 可跳过加载对应模块
+# ----- 模块开关 -----
+# 设为 false 可跳过加载
+# DOTFILES_LOAD_SDK=false   # 跳过 NVM/SDKMAN/Conda
+# DOTFILES_LOAD_WORK=false  # 跳过工作相关配置
 
-# SDK 模块 (NVM/SDKMAN/Conda)
-# ADOT_LOAD_SDK=false
-
-# 工作模块
-# ADOT_LOAD_WORK=false
-
-# =====================================
-# 路径覆盖 (在 path.zsh 之前生效)
-# =====================================
-
-# Android SDK
+# ----- 路径覆盖 (在 path.zsh 之前生效) -----
 # export ANDROID_HOME="/custom/path/to/sdk"
-
-# 工作项目路径
 # export KMM_PROJECT_DIR="/path/to/project"
 
-# Conda 路径 (如果安装在非标准位置)
-# sdk.zsh 会自动检测以下路径:
-#   ~/miniforge3, ~/miniconda3, ~/mambaforge
-#   ~/anaconda3, /opt/miniconda3, /opt/anaconda3
-# 如需使用其他路径:
-# export CONDA_PREFIX="/custom/path/to/conda"
-
-# =====================================
-# 本机专属 PATH
-# =====================================
-# 添加本机特有的路径
-
-# 高优先级 (添加到 PATH 开头)
-# export PATH="/some/priority/bin:$PATH"
-
-# 低优先级 (添加到 PATH 末尾)
-# export PATH="$PATH:/path/to/local/bin"
-
-# 示例:
-# export PATH="$PATH:$HOME/Documents/scripts"
-# export PATH="$PATH:$HOME/.local/bin"
-
-# =====================================
-# 本机专属别名
-# =====================================
+# ----- 本机专属别名 -----
 # alias myproj="cd /path/to/local/project"
-# alias python=python3
-# alias pip=pip3
 
-# =====================================
-# 代理设置
-# =====================================
+# ----- 代理设置 -----
 # export http_proxy="http://127.0.0.1:7890"
 # export https_proxy="$http_proxy"
-# export no_proxy="localhost,127.0.0.1,.local"
-
-# 代理开关函数
-# proxy_on() {
-#   export http_proxy="http://127.0.0.1:7890"
-#   export https_proxy="$http_proxy"
-#   echo "代理已开启: $http_proxy"
-# }
-# proxy_off() {
-#   unset http_proxy https_proxy
-#   echo "代理已关闭"
-# }
-
-# =====================================
-# 本机专属函数
-# =====================================
-# 可在此定义仅本机使用的函数
-
-# =====================================
-# 本机专属环境变量
-# =====================================
-# export MY_SECRET_KEY="xxx"
-# export API_TOKEN="xxx"
-
-# =====================================
-# 迁移提示
-# =====================================
-# 如果从旧的 ~/.zshrc 迁移，可能需要保留以下内容:
-# 1. 本机特有的 PATH 设置
-# 2. 本机特有的别名
-# 3. 本机特有的环境变量
-# 4. 代理设置
-# 
-# 运行以下命令查看旧配置:
-#   cat ~/.zshrc.backup.* | less

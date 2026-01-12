@@ -79,3 +79,7 @@ adotstatus() {
 
 # 清理
 unfunction _adot_load 2>/dev/null
+
+
+# Added by CodeBuddy CN
+export PATH="/Users/<user>/.codebuddy/bin:$PATH"

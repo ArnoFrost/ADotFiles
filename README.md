@@ -4,11 +4,33 @@
 
 [English](./README_EN.md) | 简体中文
 
+<!-- Badges: Core -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/ArnoFrost/ADotFiles?color=green)](https://github.com/ArnoFrost/ADotFiles/releases)
-[![Shell](https://img.shields.io/badge/shell-zsh-yellow.svg)]()
+[![Shell](https://img.shields.io/badge/Shell-Zsh-4EAA25?logo=gnu-bash&logoColor=white)]()
+[![Platform](https://img.shields.io/badge/Platform-macOS-000000?logo=apple&logoColor=white)]()
+
+<!-- Badges: Tech Stack -->
+[![Powerlevel10k](https://img.shields.io/badge/Theme-Powerlevel10k-blueviolet?logo=powershell&logoColor=white)](https://github.com/romkatv/powerlevel10k)
+[![Homebrew](https://img.shields.io/badge/Deps-Homebrew-FBB040?logo=homebrew&logoColor=white)](https://brew.sh)
+[![iCloud](https://img.shields.io/badge/Sync-iCloud-3693F3?logo=icloud&logoColor=white)]()
 
 > **Latest: [v1.0.0](https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0)** · [查看更新日志](docs/CHANGELOG.md)
+
+---
+
+## ⚡ 特性
+
+| 特性 | 说明 |
+|:-----|:-----|
+| 📦 **模块化** | 按功能拆分，按需加载，易于维护 |
+| ☁️ **可同步** | 支持 iCloud / Git / Dropbox / Syncthing |
+| 🏠 **可隔离** | 设备差异本地保留，互不干扰 |
+| 🔌 **可扩展** | `.local.zsh` + `.example` 模板机制 |
+| ⚡ **懒加载** | NVM / SDKMAN / Conda 按需加载 |
+| 🛠️ **CLI 工具** | `adot` 命令一键管理 |
+
+---
 
 ## 📖 设计理念
 
@@ -191,6 +213,12 @@ alias proj="cd ~/MyProjects"
 一套个人 dotfiles 设计方案，核心的**模块化设计**和**本地隔离机制**具有一定参考价值。欢迎 Fork 后根据自己的需求调整。
 
 > 📋 **[查看完整更新日志](docs/CHANGELOG.md)** | 🏷️ **[所有版本](https://github.com/ArnoFrost/ADotFiles/releases)**
+
+---
+
+<p align="center">
+  <sub>Made with ❤️ by <a href="https://github.com/ArnoFrost">Arno</a></sub>
+</p>
 
 ## 📄 License
 
