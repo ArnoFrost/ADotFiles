@@ -1,7 +1,7 @@
 # =====================================
 # ZSH 配置入口 - ADotFiles
 # =====================================
-# 版本: 1.0.0 | 更新: 2026-01-11
+# 版本: 1.1.0 | 更新: 2026-01-12
 # https://github.com/ArnoFrost/ADotFiles
 
 # ----- 路径定义 -----
@@ -12,7 +12,10 @@ else
   export ADOT_DIR="${ADOT_DIR:-$HOME/ADotFiles}"
 fi
 export ADOT_LOCAL="$HOME/.zsh"
-export ADOT_VERSION="1.0.0"
+export ADOT_VERSION="1.1.0"
+
+# 兼容变量 (供旧脚本使用)
+export DOTFILES_DIR="$ADOT_DIR"
 
 # ----- 加载器 -----
 _adot_load() {
@@ -39,6 +42,10 @@ _adot_load "functions.zsh"
 # 4. 可选模块（按需加载）
 [[ "$ADOT_LOAD_SDK" != "false" ]] && _adot_load "sdk.zsh"
 [[ "$ADOT_LOAD_WORK" != "false" ]] && _adot_load "work.zsh"
+
+# 5. 本地扩展 (最后加载，可覆盖前面的配置)
+[[ -f "$ADOT_LOCAL/aliases.local.zsh" ]] && source "$ADOT_LOCAL/aliases.local.zsh"
+[[ -f "$ADOT_LOCAL/path.local.zsh" ]] && source "$ADOT_LOCAL/path.local.zsh"
 
 # ----- 便捷命令 -----
 alias adot="cd \"\$ADOT_DIR\""
@@ -79,6 +86,10 @@ adotstatus() {
 
 # 清理
 unfunction _adot_load 2>/dev/null
+
+
+# Added by CodeBuddy CN
+export PATH="/Users/<user>/.codebuddy/bin:$PATH"\
 
 
 # Added by CodeBuddy CN

@@ -1,0 +1,28 @@
+# =====================================
+# 工作配置示例
+# =====================================
+# 复制此文件为 work.zsh 并根据实际情况修改
+# cp work.zsh.example work.zsh
+
+# 项目路径 (可在 local.zsh 中覆盖)
+: ${PROJECT_DIR:="$HOME/Projects/MyApp"}
+
+# ----- 构建 -----
+alias build="./gradlew assembleDebug"
+alias buildlog="./gradlew assembleDebug > build.log 2>&1 && echo '✅ Done' || echo '❌ Failed'"
+
+# ----- APK 安装 -----
+install() { _adb_install "$PROJECT_DIR/app/build/outputs/apk/debug"; }
+
+_adb_install() {
+  local dir="$1"
+  local apk=$(find "$dir" -name "*.apk" -type f -print0 2>/dev/null | xargs -0 ls -t 2>/dev/null | head -1)
+  
+  [[ -z "$apk" ]] && { echo "❌ APK not found: $dir"; return 1; }
+  
+  echo "📦 Installing: $(basename "$apk")"
+  adb install -r "$apk"
+}
+
+# ----- 自定义函数 -----
+# 添加你的工作相关函数...

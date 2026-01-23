@@ -1,7 +1,7 @@
 # =====================================
 # PATH 环境变量
 # =====================================
-# 变量可在 local.zsh 中预先覆盖
+# 个人路径可在 local.zsh 或 path.local.zsh 中添加
 
 # ----- 工具函数 -----
 _path_prepend() { [[ -d "$1" && ":$PATH:" != *":$1:"* ]] && PATH="$1:$PATH"; }
@@ -13,13 +13,15 @@ _path_append()  { [[ -d "$1" && ":$PATH:" != *":$1:"* ]] && PATH="$PATH:$1"; }
 
 # ----- Android SDK -----
 : ${ANDROID_HOME:="$HOME/Library/Android/sdk"}
-export ANDROID_HOME
-_path_append "$ANDROID_HOME/platform-tools"
-_path_append "$ANDROID_HOME/emulator"
-_path_append "$ANDROID_HOME/cmdline-tools/latest/bin"
+if [[ -d "$ANDROID_HOME" ]]; then
+  export ANDROID_HOME
+  _path_append "$ANDROID_HOME/platform-tools"
+  _path_append "$ANDROID_HOME/emulator"
+  _path_append "$ANDROID_HOME/cmdline-tools/latest/bin"
+fi
 
 # ----- 语言环境 -----
-# Ruby
+# Ruby (rbenv)
 command -v rbenv &>/dev/null && eval "$(rbenv init - zsh)"
 
 # Rust
@@ -28,10 +30,9 @@ command -v rbenv &>/dev/null && eval "$(rbenv init - zsh)"
 # Go
 [[ -d "$HOME/go/bin" ]] && _path_append "$HOME/go/bin"
 
-# ----- 应用程序 -----
-_path_prepend "$HOME/.codebuddy/bin"
-_path_append "$HOME/.lmstudio/bin"
-_path_prepend "/opt/homebrew/opt/qt@5/bin"
+# ----- 本地路径扩展 -----
+# 已移至 zshrc 统一加载，保留兼容性检查
+# 本地路径请在 ~/.zsh/local.zsh 或 ~/.zsh/path.local.zsh 中配置
 
 # 导出
 export PATH

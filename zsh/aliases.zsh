@@ -1,22 +1,15 @@
 # =====================================
-# 别名配置
+# 通用别名
 # =====================================
 
 # ----- 编辑器 -----
 alias e="code"
 alias v="vim"
 alias zshrc="code ~/.zshrc"
-alias sublime="'/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl'"
-alias subz="sublime ~/.zshrc"
-alias subg="sublime ~/.gitconfig"
-alias subb="sublime ~/.bash_profile"
-alias subh="sudo vim /etc/hosts"
 
 # ----- Shell 重载 -----
 alias sz="source ~/.zshrc"
-alias sb="source ~/.bash_profile"
 alias reload="source ~/.zshrc"
-alias p10k="code ~/.p10k.zsh"
 
 # ----- 文件操作 (现代工具优先) -----
 if command -v eza &>/dev/null; then
@@ -34,7 +27,7 @@ alias ln="ls -ln"
 
 command -v bat &>/dev/null && alias cat="bat --paging=never"
 
-# ----- 目录 -----
+# ----- 目录导航 -----
 alias ..="cd .."
 alias ...="cd ../.."
 alias proj="cd ~/Projects"
@@ -51,11 +44,9 @@ alias gl="git log --oneline --graph -20"
 alias gd="git diff"
 alias gb="git branch -vv"
 
-# ----- 工具 -----
-# alias python="python3"
-# alias pip="pip3"
+# ----- 通用工具 -----
 alias cls="clear"
-alias sp="scrcpy"
 
-# ----- 多媒体 -----
-alias ydl='yt-dlp -f "bestvideo+bestaudio/best" --merge-output-format mp4 --cookies-from-browser chrome'
+# ----- 本地别名扩展 -----
+# 已移至 zshrc 统一加载
+# 本地别名请在 ~/.zsh/local.zsh 或 ~/.zsh/aliases.local.zsh 中配置

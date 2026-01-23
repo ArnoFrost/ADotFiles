@@ -40,7 +40,8 @@ English | [简体中文](./README.md)
 - [Sync Options](#-sync-options)
 - [Module Overview](#-module-overview)
 - [CLI Commands](#-cli-commands)
-- [Extension Guide](#-extension-guide)
+- [Local Config](#-local-config)
+- [Migration Guide](#-migration-guide)
 - [Requirements](#-requirements)
 - [Known Limitations](#-known-limitations)
 
@@ -55,7 +56,7 @@ English | [简体中文](./README.md)
 | 📦 | **Modular** - Split by function, load on demand, easy to maintain |
 | ☁️ | **Syncable** - iCloud / Git / Dropbox / Syncthing supported |
 | 🏠 | **Isolated** - Device-specific stays local, no interference |
-| 🔌 | **Extensible** - `.local.zsh` + `.example` template mechanism |
+| 🔌 | **Extensible** - `~/.zsh/local.zsh` local config mechanism |
 | ⚡ | **Lazy Load** - NVM / SDKMAN / Conda on-demand loading |
 | 🛠️ | **CLI Ready** - `adot` command for one-click management |
 
@@ -119,9 +120,9 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    A["zshrc"] --> B["core"] --> C["path"] --> D["plugins"]
-    D --> E["aliases"] --> F["functions"] --> G["sdk"]
-    G --> H["work<br/>(optional)"] --> I["local<br/>(optional)"]
+    A["zshrc"] --> B["local"] --> C["core"] --> D["path"]
+    D --> E["plugins"] --> F["aliases"] --> G["functions"]
+    G --> H["sdk"] --> I["work"] --> J["*.local.zsh"]
 ```
 
 ---
@@ -196,20 +197,91 @@ ADotFiles/
 
 ---
 
-## ⚙️ Extension Guide
+## 🏠 Local Config
 
-### Local Config (~/.zsh/local.zsh)
+All device-specific configs are stored in `~/.zsh/` directory, not synced to cloud:
+
+```text
+~/.zsh/
+├── local.zsh            # Main config (device ID, PATH, aliases, env vars)
+├── aliases.local.zsh    # Local aliases (optional)
+└── path.local.zsh       # Local PATH (optional)
+```
+
+### Create Local Config
+
+```bash
+# 1. Create directory
+mkdir -p ~/.zsh
+
+# 2. Create from template
+cp ~/ADotFiles/zsh/local.zsh.template ~/.zsh/local.zsh
+
+# 3. Edit config
+code ~/.zsh/local.zsh  # or vim ~/.zsh/local.zsh
+
+# 4. Reload
+source ~/.zshrc
+```
+
+### Example Config
 
 ```zsh
+# ~/.zsh/local.zsh
+
 # Device identifier
-export DEVICE_NAME="MacBook-Pro"
+export DEVICE_NAME="MacBook-Pro-Work"
 
 # Module toggles
-ADOT_LOAD_SDK=false
+ADOT_LOAD_SDK=true
+ADOT_LOAD_WORK=true
 
-# Device-specific
-alias proj="cd ~/MyProjects"
+# Local PATH
+export PATH="$HOME/.codebuddy/bin:$PATH"
+
+# Local aliases
+alias sublime="'/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl'"
+alias subz="sublime ~/.zshrc"
+alias sp="scrcpy"
 ```
+
+---
+
+## 🔄 Migration Guide
+
+### From Old ~/.zshrc
+
+1. **Install ADotFiles**
+   ```bash
+   git clone https://github.com/ArnoFrost/ADotFiles.git ~/ADotFiles
+   cd ~/ADotFiles && bash setup.sh install
+   ```
+
+2. **Check backup**
+   ```bash
+   cat ~/.zshrc.backup.* | less
+   ```
+
+3. **Migrate to ~/.zsh/local.zsh**
+   - Device-specific PATH settings
+   - Device-specific aliases
+   - Device-specific environment variables
+   - Proxy settings
+
+4. **Verify**
+   ```bash
+   source ~/.zshrc
+   adotstatus
+   ```
+
+### Multi-device Sync
+
+| Device | Action |
+|--------|--------|
+| **Primary** | Install and use normally, config syncs to cloud |
+| **New device** | Clone repo → Run setup.sh → Create local.zsh |
+
+> 💡 Each device needs its own `~/.zsh/local.zsh` - that's the "local isolation" design
 
 ---
 

@@ -40,7 +40,8 @@
 - [同步方案](#-同步方案)
 - [模块说明](#-模块说明)
 - [CLI 命令](#-cli-命令)
-- [扩展指南](#-扩展指南)
+- [本地配置](#-本地配置)
+- [迁移指南](#-迁移指南)
 - [依赖](#-依赖)
 - [已知局限](#-已知局限)
 
@@ -55,7 +56,7 @@
 | 📦 | **模块化** - 按功能拆分，按需加载，易于维护 |
 | ☁️ | **可同步** - 支持 iCloud / Git / Dropbox / Syncthing |
 | 🏠 | **可隔离** - 设备差异本地保留，互不干扰 |
-| 🔌 | **可扩展** - `.local.zsh` + `.example` 模板机制 |
+| 🔌 | **可扩展** - `~/.zsh/local.zsh` 本地配置机制 |
 | ⚡ | **懒加载** - NVM / SDKMAN / Conda 按需加载 |
 | 🛠️ | **CLI 工具** - `adot` 命令一键管理 |
 
@@ -119,9 +120,9 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    A["zshrc"] --> B["core"] --> C["path"] --> D["plugins"]
-    D --> E["aliases"] --> F["functions"] --> G["sdk"]
-    G --> H["work<br/>(可选)"] --> I["local<br/>(可选)"]
+    A["zshrc"] --> B["local"] --> C["core"] --> D["path"]
+    D --> E["plugins"] --> F["aliases"] --> G["functions"]
+    G --> H["sdk"] --> I["work"] --> J["*.local.zsh"]
 ```
 
 ---
@@ -196,20 +197,94 @@ ADotFiles/
 
 ---
 
-## ⚙️ 扩展指南
+## 🏠 本地配置
 
-### 本地配置 (~/.zsh/local.zsh)
+所有本机特有配置集中在 `~/.zsh/` 目录，不会同步到云端：
+
+```text
+~/.zsh/
+├── local.zsh            # 主配置 (设备标识、PATH、别名、环境变量)
+├── aliases.local.zsh    # 本机别名 (可选)
+└── path.local.zsh       # 本机 PATH (可选)
+```
+
+### 创建本地配置
+
+```bash
+# 1. 创建目录
+mkdir -p ~/.zsh
+
+# 2. 从模板创建
+cp ~/ADotFiles/zsh/local.zsh.template ~/.zsh/local.zsh
+
+# 3. 编辑配置
+code ~/.zsh/local.zsh  # 或 vim ~/.zsh/local.zsh
+
+# 4. 重载生效
+source ~/.zshrc
+```
+
+### 配置示例
 
 ```zsh
+# ~/.zsh/local.zsh
+
 # 设备标识
-export DEVICE_NAME="MacBook-Pro"
+export DEVICE_NAME="MacBook-Pro-Work"
 
 # 模块开关
-ADOT_LOAD_SDK=false
+ADOT_LOAD_SDK=true
+ADOT_LOAD_WORK=true
 
-# 本机专属
-alias proj="cd ~/MyProjects"
+# 本机 PATH
+export PATH="$HOME/.codebuddy/bin:$PATH"
+
+# 本机别名
+alias sublime="'/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl'"
+alias subz="sublime ~/.zshrc"
+alias sp="scrcpy"
+
+# 代理设置
+# export http_proxy="http://127.0.0.1:7890"
 ```
+
+---
+
+## 🔄 迁移指南
+
+### 从旧 ~/.zshrc 迁移
+
+1. **安装 ADotFiles**
+   ```bash
+   git clone https://github.com/ArnoFrost/ADotFiles.git ~/ADotFiles
+   cd ~/ADotFiles && bash setup.sh install
+   ```
+
+2. **查看旧配置备份**
+   ```bash
+   cat ~/.zshrc.backup.* | less
+   ```
+
+3. **迁移本机配置到 ~/.zsh/local.zsh**
+   - 本机特有的 PATH 设置
+   - 本机特有的别名
+   - 本机特有的环境变量
+   - 代理设置
+
+4. **验证**
+   ```bash
+   source ~/.zshrc
+   adotstatus
+   ```
+
+### 多设备同步
+
+| 设备 | 操作 |
+|------|------|
+| **主力机** | 安装后正常使用，配置同步到云端 |
+| **新设备** | 克隆仓库 → 运行 setup.sh → 创建 local.zsh |
+
+> 💡 每台设备的 `~/.zsh/local.zsh` 需要单独创建，这正是"本地隔离"的设计目的
 
 ---
 
