@@ -34,7 +34,14 @@ export DEVICE_NAME="MacBook"
 # =====================================
 
 # Android SDK (非标准位置时设置)
-# export ANDROID_HOME="/custom/path/to/sdk"
+# export ANDROID_SDK_ROOT="/custom/path/to/sdk"
+# export ANDROID_HOME="$ANDROID_SDK_ROOT"
+
+# Work 区域标准 SDK 根目录 (示例)
+# export WORK_SDK_DIR="$HOME/Desktop/Work/SDK"
+# export ANDROID_SDK_ROOT="$WORK_SDK_DIR/Android"
+# export HARMONY_SDK_ROOT="$WORK_SDK_DIR/Harmony"
+# export HARMONY_SDK_TOOLS="$HARMONY_SDK_ROOT/toolchains"
 
 # Conda 路径 (如果安装在非标准位置)
 # sdk.zsh 会自动检测: ~/miniforge3, ~/miniconda3, ~/anaconda3 等

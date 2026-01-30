@@ -12,10 +12,16 @@ _path_append()  { [[ -d "$1" && ":$PATH:" != *":$1:"* ]] && PATH="$PATH:$1"; }
 [[ -d "/usr/local/Homebrew" ]] && eval "$(/usr/local/bin/brew shellenv)"
 
 # ----- Android SDK -----
-: ${ANDROID_HOME:="$HOME/Library/Android/sdk"}
+# 优先使用 ANDROID_SDK_ROOT，其次 ANDROID_HOME，最后系统默认路径
+if [[ -n "${ANDROID_SDK_ROOT:-}" ]]; then
+  export ANDROID_HOME="$ANDROID_SDK_ROOT"
+elif [[ -z "${ANDROID_HOME:-}" ]]; then
+  export ANDROID_HOME="$HOME/Library/Android/sdk"
+fi
+
 if [[ -d "$ANDROID_HOME" ]]; then
-  export ANDROID_HOME
-  _path_append "$ANDROID_HOME/platform-tools"
+  # 让 SDK 内的 adb 优先级更高，避免被 Homebrew 接管
+  _path_prepend "$ANDROID_HOME/platform-tools"
   _path_append "$ANDROID_HOME/emulator"
   _path_append "$ANDROID_HOME/cmdline-tools/latest/bin"
 fi
