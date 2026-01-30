@@ -290,7 +290,7 @@ alias sp="scrcpy"
 - [Homebrew](https://brew.sh) (macOS)
 - [Powerlevel10k](https://github.com/romkatv/powerlevel10k) (optional but recommended)
 
-Auto-installed tools: `eza` `bat` `autojump` `zsh-autosuggestions` `zsh-syntax-highlighting`
+Auto-installed tools: `eza` `bat` `zoxide` `zsh-autosuggestions` `zsh-syntax-highlighting`
 
 ---
 

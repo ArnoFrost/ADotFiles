@@ -293,7 +293,7 @@ alias sp="scrcpy"
 - [Homebrew](https://brew.sh) (macOS)
 - [Powerlevel10k](https://github.com/romkatv/powerlevel10k) (可选但推荐)
 
-自动安装的工具：`eza` `bat` `autojump` `zsh-autosuggestions` `zsh-syntax-highlighting`
+自动安装的工具：`eza` `bat` `zoxide` `zsh-autosuggestions` `zsh-syntax-highlighting`
 
 ---
 

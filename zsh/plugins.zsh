@@ -25,8 +25,10 @@ _plugin() {
 # 自动补全
 _plugin "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
-# autojump
-_plugin "$HOMEBREW_PREFIX/etc/profile.d/autojump.sh"
+# zoxide (autojump 替代)
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
 
 # 语法高亮 (必须最后加载)
 if [[ -d "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting" ]]; then

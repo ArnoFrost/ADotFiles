@@ -11,28 +11,26 @@ alias zshrc="code ~/.zshrc"
 alias sz="source ~/.zshrc"
 alias reload="source ~/.zshrc"
 
-# ----- 文件操作 (现代工具优先) -----
-if command -v eza &>/dev/null; then
-  alias ls="eza --icons"
-  alias ll="eza -l --icons"
-  alias la="eza -la --icons"
-  alias lt="eza -l --icons --sort=modified"
-  alias tree="eza --tree --icons"
-else
-  alias ll="ls -alF"
-  alias la="ls -A"
-  alias l="ls -CF"
-fi
+# ----- 文件操作 (不覆盖 ls) -----
+alias ll="ls -alF"
+alias la="ls -A"
+alias l="ls -CF"
 alias ln="ls -ln"
+
+# eza 显式别名（可选）
+if command -v eza &>/dev/null; then
+  alias exa="eza --icons"
+  alias exal="eza -l --icons"
+  alias exaa="eza -la --icons"
+  alias exat="eza --tree --icons"
+  alias exam="eza -l --icons --sort=modified"
+fi
 
 command -v bat &>/dev/null && alias cat="bat --paging=never"
 
 # ----- 目录导航 -----
 alias ..="cd .."
 alias ...="cd ../.."
-alias proj="cd ~/Projects"
-alias docs="cd ~/Documents"
-alias desk="cd ~/Desktop"
 
 # ----- Git -----
 alias g="git"

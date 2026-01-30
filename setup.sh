@@ -60,7 +60,7 @@ detect_system() {
 # =====================================
 # 依赖定义
 # =====================================
-BREW_DEPS=(eza bat autojump zsh-autosuggestions zsh-syntax-highlighting)
+BREW_DEPS=(eza bat zoxide zsh-autosuggestions zsh-syntax-highlighting)
 BREW_OPTIONAL=(fd ripgrep fzf tldr)
 
 # =====================================
