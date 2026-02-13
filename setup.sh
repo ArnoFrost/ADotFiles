@@ -2,24 +2,23 @@
 # =====================================
 # ADotFiles CLI
 # =====================================
-# 版本: 1.0.0 | 更新: 2026-01-11
-# 
 # 模块化 Zsh 配置框架
 # https://github.com/ArnoFrost/ADotFiles
 #
 # 用法: adot <command> [options]
 
-set -e
-
 # =====================================
 # 配置
 # =====================================
-VERSION="1.0.0"
 # 自动检测: 脚本所在目录 > 环境变量 > 默认路径
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ADOT_DIR="${ADOT_DIR:-$SCRIPT_DIR}"
 BACKUP_DIR="$HOME/.adot_backup"
 DRY_RUN=false
+
+# 版本号: 从 zshrc 读取，保持单一数据源
+VERSION=$(grep 'ADOT_VERSION=' "$ADOT_DIR/zshrc" 2>/dev/null | head -1 | sed 's/.*"\(.*\)".*/\1/')
+VERSION="${VERSION:-unknown}"
 
 # =====================================
 # 颜色
@@ -111,15 +110,15 @@ cmd_install() {
   
   if [[ ${#missing[@]} -gt 0 ]]; then
     $DRY_RUN && log_dry "brew install ${missing[*]}" || {
-      brew install "${missing[@]}"
+      brew install "${missing[@]}" || { log_error "Failed to install dependencies"; return 1; }
       log_ok "Dependencies installed"
     }
   fi
-  
+
   # Powerlevel10k
   if [[ ! -d "$HOME/powerlevel10k" ]]; then
     $DRY_RUN && log_dry "Install powerlevel10k" || {
-      git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+      git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k || { log_error "Failed to clone powerlevel10k"; return 1; }
       log_ok "Powerlevel10k"
     }
   else
@@ -175,6 +174,19 @@ cmd_install() {
 
   $DRY_RUN && return
 
+  # 验证 symlink 是否真正建立 (iCloud 目录下 ln -sf 可能静默退化为拷贝)
+  log_title "Verify"
+  local verify_ok=true
+  for f in "$HOME/.zshrc" "$HOME/.p10k.zsh"; do
+    if [[ -L "$f" ]]; then
+      log_ok "$(basename $f) → symlink"
+    else
+      log_warn "$(basename $f): not a symlink, may need manual fix"
+      verify_ok=false
+    fi
+  done
+  $verify_ok || log_warn "Tip: rm ~/.zshrc && ln -s \"$ADOT_DIR/zshrc\" ~/.zshrc"
+
   log_title "Done!"
   echo "Run: source ~/.zshrc"
 }
@@ -194,7 +206,7 @@ cmd_deps() {
   [[ ${#missing[@]} -eq 0 ]] && { log_ok "All dependencies installed"; return; }
   
   $DRY_RUN && log_dry "brew install ${missing[*]}" || {
-    brew install "${missing[@]}"
+    brew install "${missing[@]}" || { log_error "Failed to install dependencies"; return 1; }
     log_ok "Installed: ${missing[*]}"
   }
 }
