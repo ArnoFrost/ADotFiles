@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **setup.sh**: Sync `VERSION` dynamically from `zshrc` ADOT_VERSION (was hardcoded `1.0.0`)
 - **setup.sh**: Add post-install symlink verification with iCloud caveat warning
 - **setup.sh**: Add explicit error handling for `brew install` and `git clone`
-- **zshrc**: Remove hardcoded `/Users/<user>/` paths auto-appended by CodeBuddy / LM Studio; such tool paths belong in `~/.zsh/local.zsh`
+- **zshrc**: Remove hardcoded tool paths (CodeBuddy / LM Studio) that were auto-appended with absolute `/Users/<username>/` prefix; such paths belong in `~/.zsh/local.zsh`
 - **aliases.zsh**: Rename `alias ln` to `alias lln` to avoid shadowing system `ln` command
 - **README**: Fix incorrect backup path in migration guide (`~/.zshrc.backup.*` → `~/.adot_backup/`)
 
