@@ -9,6 +9,15 @@ zsh/aliases.local.zsh
 # macOS
 .DS_Store
 
-# 备份文件
+# 编辑器临时文件
+*.swp
+*.swo
+
+# Zsh
+.zcompdump*
+
+# 备份与补丁
 *.bak
+*.orig
+*.rej
 *~
