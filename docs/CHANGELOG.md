@@ -7,40 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2026-02-14
 
-> 备用 MacBook 同步修复与跨设备优化
+> Secondary MacBook sync fix and cross-device improvements
 
 ### Fixed
 
-- **zshrc**: 移除 CodeBuddy / LM Studio 自动追加的硬编码 `/Users/<user>/` 路径，此类工具路径应配置在 `~/.zsh/local.zsh`
-- **aliases.zsh**: `alias ln` 重命名为 `alias lln`，避免覆盖系统 `ln` 命令
+- **setup.sh**: Remove `set -e` that caused `adot install` to silently abort when `brew list` returns non-zero for missing packages
+- **setup.sh**: Sync `VERSION` dynamically from `zshrc` ADOT_VERSION (was hardcoded `1.0.0`)
+- **setup.sh**: Add post-install symlink verification with iCloud caveat warning
+- **setup.sh**: Add explicit error handling for `brew install` and `git clone`
+- **zshrc**: Remove hardcoded `/Users/<user>/` paths auto-appended by CodeBuddy / LM Studio; such tool paths belong in `~/.zsh/local.zsh`
+- **aliases.zsh**: Rename `alias ln` to `alias lln` to avoid shadowing system `ln` command
+- **README**: Fix incorrect backup path in migration guide (`~/.zshrc.backup.*` → `~/.adot_backup/`)
 
 ### Added
 
-- **setup.sh**: `adot install` 自动创建 `ai-task` 软链接，优先使用相对路径（无用户名依赖），兜底使用 `$HOME` 绝对路径
+- **setup.sh**: `adot install` auto-creates `ai-task` symlink with relative path preference (no username dependency), falling back to `$HOME` absolute path
 
 ### Changed
 
-- **ai-task symlink**: 从绝对路径 `/Users/<user>/...` 改为相对路径 `../AI-TASK/projects/dotfiles`，跨设备稳定
+- **ai-task symlink**: From absolute `/Users/<user>/...` to relative `../AI-TASK/projects/dotfiles` for cross-device stability
 
 ---
 
 ## [1.1.0] - 2026-01-30
 
-> zoxide 迁移与别名规范化
+> Zoxide migration and alias normalization
 
 ### Changed
 
-- **plugins.zsh**: 从 autojump 迁移到 zoxide
-- **aliases.zsh**: ls 别名规范化，保留系统 `ls`，eza 使用显式别名
-- **path.zsh**: 标准化 Android SDK 路径处理
+- **plugins.zsh**: Migrate from autojump to zoxide
+- **aliases.zsh**: Normalize ls aliases — keep system `ls` as default, use explicit `eza` aliases
+- **path.zsh**: Standardize Android SDK path handling
 
 ---
 
 ## [1.0.0] - 2026-01-11
 
-> 🏷️ [Release](https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0) · [Compare](https://github.com/ArnoFrost/ADotFiles/commits/v1.0.0)
-
-### Features
+### Added
 
 - **CLI Commands**: `adot install`, `adot deps`, `adot doctor`, `adot status`, `adot unlink`, `adot uninstall`, `adot restore`, `adot pull`, `adot sync`
 - **Modular Config**: `core`, `path`, `plugins`, `aliases`, `functions`, `sdk`
@@ -64,8 +67,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Templates
 
 - `work.zsh.example` - Work-related config template
-- `path.local.zsh.example` - Personal PATH extensions
-- `aliases.local.zsh.example` - Personal aliases
 - `local.zsh.template` - Device-specific config
 
 ### Shell Aliases
@@ -90,3 +91,9 @@ This project follows [Semantic Versioning](https://semver.org/):
 - **PATCH** (x.y.Z): Bug fixes, documentation updates
 - **MINOR** (x.Y.z): New features, backward compatible
 - **MAJOR** (X.y.z): Breaking changes
+
+---
+
+[1.2.0]: https://github.com/ArnoFrost/ADotFiles/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/ArnoFrost/ADotFiles/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0
