@@ -15,7 +15,7 @@ alias reload="source ~/.zshrc"
 alias ll="ls -alF"
 alias la="ls -A"
 alias l="ls -CF"
-alias ln="ls -ln"
+alias lln="ls -ln"  # 原 ln，改名避免覆盖系统命令
 
 # eza 显式别名（可选）
 if command -v eza &>/dev/null; then

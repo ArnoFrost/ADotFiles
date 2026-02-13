@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-14
+
+> 备用 MacBook 同步修复与跨设备优化
+
+### Fixed
+
+- **zshrc**: 移除 CodeBuddy / LM Studio 自动追加的硬编码 `/Users/<user>/` 路径，此类工具路径应配置在 `~/.zsh/local.zsh`
+- **aliases.zsh**: `alias ln` 重命名为 `alias lln`，避免覆盖系统 `ln` 命令
+
+### Added
+
+- **setup.sh**: `adot install` 自动创建 `ai-task` 软链接，优先使用相对路径（无用户名依赖），兜底使用 `$HOME` 绝对路径
+
+### Changed
+
+- **ai-task symlink**: 从绝对路径 `/Users/<user>/...` 改为相对路径 `../AI-TASK/projects/dotfiles`，跨设备稳定
+
+---
+
+## [1.1.0] - 2026-01-30
+
+> zoxide 迁移与别名规范化
+
+### Changed
+
+- **plugins.zsh**: 从 autojump 迁移到 zoxide
+- **aliases.zsh**: ls 别名规范化，保留系统 `ls`，eza 使用显式别名
+- **path.zsh**: 标准化 Android SDK 路径处理
+
+---
+
 ## [1.0.0] - 2026-01-11
 
 > 🏷️ [Release](https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0) · [Compare](https://github.com/ArnoFrost/ADotFiles/commits/v1.0.0)

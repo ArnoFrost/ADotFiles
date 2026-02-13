@@ -150,8 +150,31 @@ cmd_install() {
     }
   fi
   
+  # ai-task 链接 (AI-TASK 协作目录)
+  local aitask_target="$ADOT_DIR/ai-task"
+  if [[ ! -e "$aitask_target" ]]; then
+    local aitask_src=""
+    # 优先: 相对路径 (同级 iCloud 目录, 无用户名依赖)
+    if [[ -d "$ADOT_DIR/../AI-TASK/projects/dotfiles" ]]; then
+      aitask_src="../AI-TASK/projects/dotfiles"
+    # 兜底: $HOME 绝对路径
+    elif [[ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Backup/AI-TASK/projects/dotfiles" ]]; then
+      aitask_src="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Backup/AI-TASK/projects/dotfiles"
+    fi
+    if [[ -n "$aitask_src" ]]; then
+      $DRY_RUN && log_dry "ai-task -> $aitask_src" || {
+        ln -s "$aitask_src" "$aitask_target"
+        log_ok "ai-task"
+      }
+    else
+      log_info "ai-task: AI-TASK directory not found, skipped"
+    fi
+  else
+    log_ok "ai-task"
+  fi
+
   $DRY_RUN && return
-  
+
   log_title "Done!"
   echo "Run: source ~/.zshrc"
 }
