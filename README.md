@@ -262,7 +262,8 @@ alias sp="scrcpy"
 
 2. **查看旧配置备份**
    ```bash
-   cat ~/.zshrc.backup.* | less
+   ls ~/.adot_backup/        # 查看所有备份
+   adot restore              # 交互式恢复
    ```
 
 3. **迁移本机配置到 ~/.zsh/local.zsh**

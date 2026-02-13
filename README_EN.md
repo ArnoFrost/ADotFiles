@@ -259,7 +259,8 @@ alias sp="scrcpy"
 
 2. **Check backup**
    ```bash
-   cat ~/.zshrc.backup.* | less
+   ls ~/.adot_backup/        # List all backups
+   adot restore              # Interactive restore
    ```
 
 3. **Migrate to ~/.zsh/local.zsh**
