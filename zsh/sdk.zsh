@@ -4,16 +4,25 @@
 
 # ----- NVM (延迟加载) -----
 export NVM_DIR="$HOME/.nvm"
-# 懒加载：首次调用 nvm/node/npm 时才初始化
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  # 将 default node bin 预加入 PATH，使全局安装的工具立即可用
+  # (如 claude-internal, typescript 等 npm -g 安装的命令)
+  # 完整 nvm 初始化仍延迟到首次调用 nvm 命令时
+  _nvm_default_path="$NVM_DIR/versions/node/$(cat "$NVM_DIR/alias/default" 2>/dev/null)"
+  # alias 可能是 major 版本号(如 "20")，需要解析到实际目录
+  if [[ ! -d "$_nvm_default_path" && -d "$NVM_DIR/versions/node" ]]; then
+    _nvm_default_alias=$(cat "$NVM_DIR/alias/default" 2>/dev/null)
+    _nvm_default_path=$(ls -d "$NVM_DIR/versions/node/v${_nvm_default_alias}"* 2>/dev/null | sort -V | tail -1)
+  fi
+  [[ -d "$_nvm_default_path/bin" ]] && export PATH="$_nvm_default_path/bin:$PATH"
+  unset _nvm_default_path _nvm_default_alias
+
+  # 懒加载：首次调用 nvm 时才执行完整初始化
   _nvm_lazy_load() {
-    unfunction node npm npx nvm 2>/dev/null
+    unfunction nvm 2>/dev/null
     source "$NVM_DIR/nvm.sh"
     [[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
   }
-  node()  { _nvm_lazy_load; node  "$@"; }
-  npm()   { _nvm_lazy_load; npm   "$@"; }
-  npx()   { _nvm_lazy_load; npx   "$@"; }
   nvm()   { _nvm_lazy_load; nvm   "$@"; }
 fi
 
