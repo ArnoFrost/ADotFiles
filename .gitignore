@@ -6,6 +6,9 @@ zsh/work.zsh
 zsh/path.local.zsh
 zsh/aliases.local.zsh
 
+# Claude Code 本地配置
+.claude/settings.local.json
+
 # macOS
 .DS_Store
 

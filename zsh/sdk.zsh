@@ -6,7 +6,7 @@
 export NVM_DIR="$HOME/.nvm"
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
   # 将 default node bin 预加入 PATH，使全局安装的工具立即可用
-  # (如 claude-internal, typescript 等 npm -g 安装的命令)
+  # (如 claude, typescript 等 npm -g 安装的命令)
   # 完整 nvm 初始化仍延迟到首次调用 nvm 命令时
   _nvm_default_path="$NVM_DIR/versions/node/$(cat "$NVM_DIR/alias/default" 2>/dev/null)"
   # alias 可能是 major 版本号(如 "20")，需要解析到实际目录
