@@ -70,6 +70,20 @@ is_icloud_link() {
   [[ "$target" == *"Mobile Documents"* || "$target" == *"iCloud"* ]]
 }
 
+is_adot_source() {
+  [[ -f "$1" && ! -L "$1" ]] && grep -q "# ADotFiles source-stub" "$1" 2>/dev/null
+}
+
+create_zshrc_stub() {
+  local dst="$1" src="$2"
+  cat > "$dst" << STUB
+# ADotFiles source-stub — DO NOT EDIT above this line
+# This file sources the shared ADotFiles config.
+# Device-specific PATH exports appended below by third-party tools are safe here.
+source "$src"
+STUB
+}
+
 check_adot() {
   [[ ! -d "$ADOT_DIR" ]] && { log_error "ADotFiles 目录不存在: $ADOT_DIR"; exit 1; }
   for f in zshrc p10k.zsh zsh/core.zsh; do
@@ -127,15 +141,34 @@ cmd_install() {
   
   # 链接
   log_title "Linking"
-  for pair in "zshrc:.zshrc" "p10k.zsh:.p10k.zsh"; do
-    src="$ADOT_DIR/${pair%%:*}"
-    dst="$HOME/${pair##*:}"
-    $DRY_RUN && log_dry "$dst -> ADotFiles" || {
-      backup_file "$dst"
-      ln -sf "$src" "$dst"
-      log_ok "$dst"
+
+  # .zshrc: source-stub (本地文件, source 共享配置)
+  local zshrc_dst="$HOME/.zshrc"
+  if is_adot_source "$zshrc_dst"; then
+    log_ok ".zshrc source-stub already exists"
+  elif [[ -L "$zshrc_dst" ]]; then
+    # 旧版 symlink → 迁移为 source-stub
+    $DRY_RUN && log_dry "Migrate .zshrc symlink → source-stub" || {
+      rm "$zshrc_dst"
+      create_zshrc_stub "$zshrc_dst" "$ADOT_DIR/zshrc"
+      log_ok ".zshrc migrated from symlink to source-stub"
     }
-  done
+  else
+    $DRY_RUN && log_dry "Create .zshrc source-stub" || {
+      backup_file "$zshrc_dst"
+      create_zshrc_stub "$zshrc_dst" "$ADOT_DIR/zshrc"
+      log_ok ".zshrc source-stub created"
+    }
+  fi
+
+  # .p10k.zsh: 保持 symlink
+  local p10k_src="$ADOT_DIR/p10k.zsh"
+  local p10k_dst="$HOME/.p10k.zsh"
+  $DRY_RUN && log_dry "$p10k_dst -> ADotFiles" || {
+    backup_file "$p10k_dst"
+    ln -sf "$p10k_src" "$p10k_dst"
+    log_ok "$p10k_dst"
+  }
   
   # 本地配置
   mkdir -p "$HOME/.zsh"
@@ -174,18 +207,26 @@ cmd_install() {
 
   $DRY_RUN && return
 
-  # 验证 symlink 是否真正建立 (iCloud 目录下 ln -sf 可能静默退化为拷贝)
+  # 验证
   log_title "Verify"
   local verify_ok=true
-  for f in "$HOME/.zshrc" "$HOME/.p10k.zsh"; do
-    if [[ -L "$f" ]]; then
-      log_ok "$(basename $f) → symlink"
-    else
-      log_warn "$(basename $f): not a symlink, may need manual fix"
-      verify_ok=false
-    fi
-  done
-  $verify_ok || log_warn "Tip: rm ~/.zshrc && ln -s \"$ADOT_DIR/zshrc\" ~/.zshrc"
+
+  # .zshrc: 期望 source-stub
+  if is_adot_source "$HOME/.zshrc"; then
+    log_ok ".zshrc → source-stub"
+  else
+    log_warn ".zshrc: not a source-stub, may need manual fix"
+    verify_ok=false
+  fi
+
+  # .p10k.zsh: 期望 symlink
+  if [[ -L "$HOME/.p10k.zsh" ]]; then
+    log_ok ".p10k.zsh → symlink"
+  else
+    log_warn ".p10k.zsh: not a symlink, may need manual fix"
+    verify_ok=false
+  fi
+  $verify_ok || log_warn "Tip: re-run 'adot install' or check file permissions"
 
   log_title "Done!"
   echo "Run: source ~/.zshrc"
@@ -220,15 +261,24 @@ cmd_doctor() {
   echo "  Zsh $(zsh --version | awk '{print $2}')"
   
   log_title "Links"
-  for file in "$HOME/.zshrc" "$HOME/.p10k.zsh"; do
-    if [[ -L "$file" ]]; then
-      is_icloud_link "$file" && log_ok "$(basename $file) → iCloud" || log_warn "$(basename $file) → $(readlink $file)"
-    elif [[ -f "$file" ]]; then
-      log_warn "$(basename $file) (not linked)"
-    else
-      log_error "$(basename $file) missing"
-    fi
-  done
+  # .zshrc: 期望 source-stub
+  if is_adot_source "$HOME/.zshrc"; then
+    log_ok ".zshrc → source-stub"
+  elif [[ -L "$HOME/.zshrc" ]]; then
+    log_warn ".zshrc → symlink (旧版, 运行 adot install 迁移)"
+  elif [[ -f "$HOME/.zshrc" ]]; then
+    log_warn ".zshrc (not managed by ADotFiles)"
+  else
+    log_error ".zshrc missing"
+  fi
+  # .p10k.zsh: 期望 symlink
+  if [[ -L "$HOME/.p10k.zsh" ]]; then
+    is_icloud_link "$HOME/.p10k.zsh" && log_ok ".p10k.zsh → iCloud" || log_warn ".p10k.zsh → $(readlink "$HOME/.p10k.zsh")"
+  elif [[ -f "$HOME/.p10k.zsh" ]]; then
+    log_warn ".p10k.zsh (not linked)"
+  else
+    log_error ".p10k.zsh missing"
+  fi
   [[ -f "$HOME/.zsh/local.zsh" ]] && log_ok "local.zsh" || log_warn "local.zsh missing"
   
   log_title "Dependencies"
@@ -265,15 +315,24 @@ cmd_doctor() {
 # =====================================
 cmd_status() {
   log_title "Status"
-  for file in "$HOME/.zshrc" "$HOME/.p10k.zsh"; do
-    if [[ -L "$file" ]]; then
-      is_icloud_link "$file" && log_ok "$(basename $file) → iCloud" || log_warn "$(basename $file) → $(readlink $file)"
-    elif [[ -f "$file" ]]; then
-      log_info "$(basename $file) (standalone)"
-    else
-      log_error "$(basename $file) missing"
-    fi
-  done
+  # .zshrc: 期望 source-stub
+  if is_adot_source "$HOME/.zshrc"; then
+    log_ok ".zshrc → source-stub"
+  elif [[ -L "$HOME/.zshrc" ]]; then
+    log_warn ".zshrc → symlink (旧版, 运行 adot install 迁移)"
+  elif [[ -f "$HOME/.zshrc" ]]; then
+    log_info ".zshrc (standalone)"
+  else
+    log_error ".zshrc missing"
+  fi
+  # .p10k.zsh: 期望 symlink
+  if [[ -L "$HOME/.p10k.zsh" ]]; then
+    is_icloud_link "$HOME/.p10k.zsh" && log_ok ".p10k.zsh → iCloud" || log_warn ".p10k.zsh → $(readlink "$HOME/.p10k.zsh")"
+  elif [[ -f "$HOME/.p10k.zsh" ]]; then
+    log_info ".p10k.zsh (standalone)"
+  else
+    log_error ".p10k.zsh missing"
+  fi
   [[ -f "$HOME/.zsh/local.zsh" ]] && log_ok "local.zsh configured" || log_warn "local.zsh not found"
 }
 
@@ -282,22 +341,54 @@ cmd_status() {
 # =====================================
 cmd_unlink() {
   log_title "Unlinking..."
-  
-  for file in "$HOME/.zshrc" "$HOME/.p10k.zsh"; do
-    [[ ! -L "$file" ]] && { log_info "$(basename $file) not a link"; continue; }
-    
-    $DRY_RUN && { log_dry "Unlink $file"; continue; }
-    
-    rm "$file"
-    local backup=$(ls -t "$BACKUP_DIR/$(basename $file)."* 2>/dev/null | head -1)
-    if [[ -f "$backup" ]]; then
-      cp "$backup" "$file"
-      log_ok "$(basename $file) restored from backup"
-    else
-      touch "$file"
-      log_warn "$(basename $file) unlinked (no backup)"
-    fi
-  done
+
+  # .zshrc: source-stub 或旧版 symlink
+  local zshrc="$HOME/.zshrc"
+  if is_adot_source "$zshrc"; then
+    $DRY_RUN && { log_dry "Remove .zshrc source-stub"; } || {
+      rm "$zshrc"
+      local backup=$(ls -t "$BACKUP_DIR/.zshrc."* 2>/dev/null | head -1)
+      if [[ -f "$backup" ]]; then
+        cp "$backup" "$zshrc"
+        log_ok ".zshrc restored from backup"
+      else
+        touch "$zshrc"
+        log_warn ".zshrc removed (no backup)"
+      fi
+    }
+  elif [[ -L "$zshrc" ]]; then
+    $DRY_RUN && { log_dry "Unlink .zshrc symlink"; } || {
+      rm "$zshrc"
+      local backup=$(ls -t "$BACKUP_DIR/.zshrc."* 2>/dev/null | head -1)
+      if [[ -f "$backup" ]]; then
+        cp "$backup" "$zshrc"
+        log_ok ".zshrc restored from backup"
+      else
+        touch "$zshrc"
+        log_warn ".zshrc unlinked (no backup)"
+      fi
+    }
+  else
+    log_info ".zshrc not managed by ADotFiles"
+  fi
+
+  # .p10k.zsh: symlink
+  local p10k="$HOME/.p10k.zsh"
+  if [[ -L "$p10k" ]]; then
+    $DRY_RUN && { log_dry "Unlink .p10k.zsh"; } || {
+      rm "$p10k"
+      local backup=$(ls -t "$BACKUP_DIR/.p10k.zsh."* 2>/dev/null | head -1)
+      if [[ -f "$backup" ]]; then
+        cp "$backup" "$p10k"
+        log_ok ".p10k.zsh restored from backup"
+      else
+        touch "$p10k"
+        log_warn ".p10k.zsh unlinked (no backup)"
+      fi
+    }
+  else
+    log_info ".p10k.zsh not a link"
+  fi
 }
 
 # =====================================
@@ -400,7 +491,9 @@ cmd_sync() {
     echo "$status"
     echo ""
     read -p "Commit message: " msg
-    git -C "$ADOT_DIR" add -A
+    git -C "$ADOT_DIR" add -u
+    # 也添加新的被 .gitignore 允许的文件
+    git -C "$ADOT_DIR" diff --cached --quiet && git -C "$ADOT_DIR" add --all
     git -C "$ADOT_DIR" commit -m "${msg:-update}"
     log_ok "Committed"
   fi
@@ -420,7 +513,7 @@ ${BOLD}USAGE${NC}
     adot <command> [options]
 
 ${BOLD}COMMANDS${NC}
-    install     Install ADotFiles (link + deps)
+    install     Install ADotFiles (source-stub + deps)
     deps        Install dependencies only
     doctor      Run diagnostics
     status      Show link status

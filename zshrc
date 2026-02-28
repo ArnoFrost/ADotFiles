@@ -1,18 +1,22 @@
 # =====================================
 # ZSH 配置入口 - ADotFiles
 # =====================================
-# 版本: 1.2.0 | 更新: 2026-02-14
+# 版本: 1.3.0 | 更新: 2026-02-28
 # https://github.com/ArnoFrost/ADotFiles
 
 # ----- 路径定义 -----
-# 自动检测 ADotFiles 位置: 符号链接源 > 环境变量 > 默认路径
-if [[ -L "$HOME/.zshrc" ]]; then
+# 自动检测 ADotFiles 位置: source 脚本路径 > 符号链接源 > 环境变量 > 默认路径
+if [[ -n "${0:A:h}" && -f "${0:A:h}/zsh/core.zsh" ]]; then
+  # 首选: 通过 source 解析脚本真实路径 (支持 source-stub 模式)
+  export ADOT_DIR="${0:A:h}"
+elif [[ -L "$HOME/.zshrc" ]]; then
+  # 兼容: 旧版 symlink 模式
   export ADOT_DIR="$(dirname "$(readlink "$HOME/.zshrc")")"
 else
   export ADOT_DIR="${ADOT_DIR:-$HOME/ADotFiles}"
 fi
 export ADOT_LOCAL="$HOME/.zsh"
-export ADOT_VERSION="1.2.0"
+export ADOT_VERSION="1.3.0"
 
 # 兼容变量 (供旧脚本使用)
 export DOTFILES_DIR="$ADOT_DIR"
@@ -56,7 +60,7 @@ alias adotreload="source ~/.zshrc && echo '✅ 配置已重载'"
 # 版本管理
 adotsave() {
   local msg="${1:-snapshot $(date +%Y-%m-%d\ %H:%M)}"
-  git -C "$ADOT_DIR" add -A && git -C "$ADOT_DIR" commit -m "$msg" && echo "✅ 已保存: $msg"
+  git -C "$ADOT_DIR" add -u && git -C "$ADOT_DIR" commit -m "$msg" && echo "✅ 已保存: $msg"
 }
 adotlog() { git -C "$ADOT_DIR" log --oneline -20; }
 adotdiff() { git -C "$ADOT_DIR" diff; }
@@ -71,9 +75,14 @@ adotstatus() {
   echo "  本地:      $ADOT_LOCAL"
   echo ""
   echo "链接状态:"
-  for f in ~/.zshrc ~/.p10k.zsh; do
-    [[ -L "$f" ]] && echo "  ✅ $(basename $f) -> $(readlink $f)" || echo "  ⚠️  $(basename $f) 未链接"
-  done
+  if [[ -L "$HOME/.zshrc" ]]; then
+    echo "  ⚠️  .zshrc -> symlink (旧版, 建议运行 adot install 迁移到 source-stub)"
+  elif [[ -f "$HOME/.zshrc" ]] && grep -q "# ADotFiles source-stub" "$HOME/.zshrc" 2>/dev/null; then
+    echo "  ✅ .zshrc -> source-stub"
+  else
+    echo "  ⚠️  .zshrc 未管理"
+  fi
+  [[ -L "$HOME/.p10k.zsh" ]] && echo "  ✅ .p10k.zsh -> $(readlink "$HOME/.p10k.zsh")" || echo "  ⚠️  .p10k.zsh 未链接"
   echo ""
   echo "已加载模块:"
   echo "  core, path, plugins, aliases, functions"
@@ -86,3 +95,7 @@ adotstatus() {
 
 # 清理
 unfunction _adot_load 2>/dev/null
+
+# ===== END OF ADOT CONFIG =====
+# DO NOT append PATH exports below this line.
+# Use ~/.zsh/local.zsh for device-specific PATH, aliases, and env vars.

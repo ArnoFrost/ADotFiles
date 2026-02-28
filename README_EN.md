@@ -109,7 +109,7 @@ flowchart TB
         ALIAS_L["aliases.local.zsh"]
     end
     
-    REPO -->|symlink| ZSHRC
+    REPO -->|source| ZSHRC
     PATH -->|source| PATH_L
     ALIASES -->|source| ALIAS_L
     ZSHRC -->|source| WORK

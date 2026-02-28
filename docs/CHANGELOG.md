@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-28
+
+> Migrate ~/.zshrc from symlink to source-stub to prevent third-party PATH pollution
+
+### Changed
+
+- **zshrc**: `~/.zshrc` is now a local source-stub file instead of a symlink; third-party tools (CodeBuddy, LM Studio, etc.) can safely append `export PATH=...` without polluting the shared config
+- **zshrc**: ADOT_DIR detection uses `${0:A:h}` (zsh source path resolution) as primary method, symlink as compatible fallback
+- **zshrc**: `adotstatus` now distinguishes source-stub / legacy symlink / unmanaged states
+- **setup.sh**: `adot install` creates source-stub for `.zshrc`, keeps symlink for `.p10k.zsh`
+- **setup.sh**: `adot install` auto-migrates legacy symlink to source-stub
+- **setup.sh**: `adot doctor/status` separately checks `.zshrc` (expects source-stub) and `.p10k.zsh` (expects symlink)
+- **setup.sh**: `adot unlink` handles both source-stub and legacy symlink
+- **README**: Architecture diagram updated from `symlink` to `source`
+
+### Migration
+
+- Running `adot install` on existing symlink setup will automatically migrate to source-stub
+- No manual action required; backward compatible with symlink mode
+
+---
+
 ## [1.2.0] - 2026-02-14
 
 > Secondary MacBook sync fix and cross-device improvements
@@ -94,6 +116,7 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+[1.3.0]: https://github.com/ArnoFrost/ADotFiles/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/ArnoFrost/ADotFiles/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/ArnoFrost/ADotFiles/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ArnoFrost/ADotFiles/releases/tag/v1.0.0
