@@ -34,6 +34,9 @@ _adot_load() {
 # 1. local.zsh 最先加载 - 设置本机变量供后续使用
 _adot_load "local.zsh"
 
+# 1.5. secret.zsh - 敏感凭证 (gitignored, 在 core 之前加载)
+_adot_load "secret.zsh"
+
 # 2. 核心配置
 _adot_load "core.zsh"
 _adot_load "path.zsh"
@@ -52,7 +55,14 @@ _adot_load "functions.zsh"
 [[ -f "$ADOT_LOCAL/path.local.zsh" ]] && source "$ADOT_LOCAL/path.local.zsh"
 
 # ----- 便捷命令 -----
-alias adot="cd \"\$ADOT_DIR\""
+unalias adot 2>/dev/null
+adot() {
+  if [[ $# -eq 0 ]]; then
+    cd "$ADOT_DIR"
+  else
+    bash "$ADOT_DIR/setup.sh" "$@"
+  fi
+}
 alias adotedit="code \"\$ADOT_DIR\""
 alias adotlocal="code \"\$ADOT_LOCAL/local.zsh\""
 alias adotreload="source ~/.zshrc && echo '✅ 配置已重载'"
