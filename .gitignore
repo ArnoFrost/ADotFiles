@@ -2,9 +2,17 @@
 ai-task
 
 # 本地配置文件 (不同步)
+zsh/secret.zsh
 zsh/work.zsh
 zsh/path.local.zsh
 zsh/aliases.local.zsh
+
+# 敏感模式通配 (防止误提交)
+*secret*
+!*secret*.template
+*token*
+*.key
+*.pem
 
 # Claude Code 本地配置
 .claude/settings.local.json

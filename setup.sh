@@ -492,8 +492,6 @@ cmd_sync() {
     echo ""
     read -p "Commit message: " msg
     git -C "$ADOT_DIR" add -u
-    # 也添加新的被 .gitignore 允许的文件
-    git -C "$ADOT_DIR" diff --cached --quiet && git -C "$ADOT_DIR" add --all
     git -C "$ADOT_DIR" commit -m "${msg:-update}"
     log_ok "Committed"
   fi
