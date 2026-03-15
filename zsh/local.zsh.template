@@ -89,6 +89,6 @@ export DEVICE_NAME="MacBook"
 # =====================================
 # 本机专属环境变量
 # =====================================
-# export MY_SECRET_KEY="xxx"
-# export API_TOKEN="xxx"
+# 注意: 秘钥/凭证请放在 $ADOT_DIR/zsh/secret.zsh (参见 secret.zsh.template)
+# 此处仅放非敏感的本机环境变量
 
